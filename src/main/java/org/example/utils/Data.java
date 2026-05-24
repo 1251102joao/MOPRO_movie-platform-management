@@ -1,0 +1,166 @@
+package org.example.utils;
+
+
+public class Data implements java.io.Serializable {
+
+    private int ano;
+
+    private int mes;
+
+    private int dia;
+
+    private static final int ANO_POR_OMISSAO = 1;
+
+    private static final int MES_POR_OMISSAO = 1;
+
+    private static final int DIA_POR_OMISSAO = 1;
+
+    private static String[] nomeDiaDaSemana = {"Domingo", "Segunda-feira",
+            "Terça-feira", "Quarta-feira",
+            "Quinta-feira", "Sexta-feira",
+            "Sábado"};
+
+    //Número de dias de cada mês do ano.
+    private static int[] diasPorMes = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30,
+            31, 30, 31};
+
+    private static String[] nomeMes = {"Inválido", "Janeiro", "Fevereiro",
+            "Março", "Abril", "Maio", "Junho",
+            "Julho", "Agosto", "Setembro",
+            "Outubro", "Novembro", "Dezembro"};
+
+    public Data(int ano, int mes, int dia) {
+        this.ano = ano;
+        this.mes = mes;
+        this.dia = dia;
+    }
+
+    public Data(Data data) {
+        ano = data.ano;
+        mes = data.mes;
+        dia = data.dia;
+    }
+
+    public Data() {
+        ano = ANO_POR_OMISSAO;
+        mes = MES_POR_OMISSAO;
+        dia = DIA_POR_OMISSAO;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public int getDia() {
+        return dia;
+    }
+
+    public void setData(int ano, int mes, int dia) { //Modifica o ano, mês e dia da data!
+        this.ano = ano;
+        this.mes = mes;
+        this.dia = dia;
+    }
+
+    //Devolve a descrição textual da data no formato: diaDaSemana, dia, mês, ano.
+
+    public String toString() {
+        return this.determinarDiaDaSemana() + ", " + this.dia + " de " + nomeMes[mes] + " de " + ano;
+    }
+
+    //Devolve a data no formato:%04d/%02d/%02d.
+
+    public String toAnoMesDiaString() {
+        return String.format("%04d/%02d/%02d", ano, mes, dia);
+    }
+
+
+    public String determinarDiaDaSemana() { //Dá return ao dioa da semana
+        int totalDias = contarDias();
+        totalDias = totalDias % 7;
+
+        return nomeDiaDaSemana[totalDias];
+    }
+
+    public boolean isMaior(Data outraData) {  //Devolve true se a data for maior do que a data recebida por parâmetro.
+        int totalDias = contarDias();
+        int totalDias1 = outraData.contarDias();
+
+        return totalDias > totalDias1;
+    }
+
+
+
+    public int calcularDiferenca(Data outraData) { //Devolve a diferença em número de dias entre a data e a data recebida
+        int totalDias = this.contarDias();
+        int totalDias1 = outraData.contarDias();
+
+        return Math.abs(totalDias - totalDias1);
+    }
+
+    //D+evolve a diferença em número de dias entre a data e a data recebida
+    public int calcularDiferenca(int ano, int mes, int dia) {
+        int totalDias = contarDias();
+        Data outraData = new Data(ano, mes, dia);
+        int totalDias1 = outraData.contarDias();
+
+        return Math.abs(totalDias - totalDias1);
+    }
+
+    //Devolve true se o ano passado por parâmetro for bissexto.
+
+    public static boolean isAnoBissexto(int ano) {
+        return ano % 4 == 0 && ano % 100 != 0 || ano % 400 == 0;
+    }
+
+    private int contarDias() {
+        int totalDias = 0;
+
+        for (int i = 1; i < ano; i++) {
+            totalDias += isAnoBissexto(i) ? 366 : 365;
+        }
+        for (int i = 1; i < mes; i++) {
+            totalDias += diasPorMes[i];
+        }
+        totalDias += (isAnoBissexto(ano) && mes > 2) ? 1 : 0;
+        totalDias += dia;
+
+        return totalDias;
+    }
+
+    @Override
+    public boolean equals(Object outroObjeto) {
+        if (this == outroObjeto) {
+            return true;
+        }
+        if (outroObjeto == null || getClass() != outroObjeto.getClass()) {
+            return false;
+        }
+        final Data other = (Data) outroObjeto;
+        if (this.ano != other.ano) {
+            return false;
+        }
+        if (this.mes != other.mes) {
+            return false;
+        }
+        if (this.dia != other.dia) {
+            return false;
+        }
+        return true;
+    }
+
+    public int compareTo(Object data) {
+        Data d = (Data) data;
+        if (this.isMaior(d))
+            return 1;
+        else if (this.equals(d))
+            return 0;
+        else
+            return -1;
+    }
+}
+
+

@@ -39,8 +39,8 @@ src/test/java/org/example/PlataformaTest.java   JUnit tests
 Requires a JDK and Maven. The Java version is set in `pom.xml`.
 
 ```bash
-git clone https://github.com/1251102joao/MOPRO_movie-platform-management.git
-cd MOPRO_movie-platform-management
+git clone https://github.com/1251102joao/movie-platform-management.git
+cd movie-platform-management
 mvn test                                  # run the unit tests
 mvn compile exec:java                     # start the application
 ```
